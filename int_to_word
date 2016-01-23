@@ -1,0 +1,105 @@
+/**
+ * 
+ */
+/**
+ * Convert integer to word
+ * @author tmora
+ *
+ */
+package int_to_word_rv1;
+
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
+public class int_to_word{
+	
+	static String[] ones = {"", "one","two","three","four","five","six","seven","eight","nine","ten",
+			 			"eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen"};
+	static String[] tens = {"ten", "twenty","thirty","forty","fifty","sixty","seventy","eighty","ninety"};
+	static String[] hundreds = {"one hundred", "two hundred", "three hundred", "four hundred", "five hundred",
+			 			"six hundred", "seven hundred", "eight hundred", "nine hundred"};
+	static String[] thousands = {"thousand", "one thousand", "two thousand", "three thousand", "four thousand",
+			 			"five thousand", "six thousand", "seven thousand", "eight thousand", "nine thousand"};
+	static String[] millions = {"million", "one million", "two million", "three million", "four million", "five million",
+			 			"six million", "seven million", "eight million", "nine million"};
+
+	
+	
+
+	public static void main(String[] args) {
+		
+		//get number
+		int valid_number = ask_number();
+		
+		// if zero than end program and output
+		if (valid_number == 0)
+			System.out.println("\nThe word is: zero");
+		else{
+			try {
+			   	System.out.println("\nThe word is: " + int_to_word(valid_number).trim().replaceAll(" +", " "));
+			} catch (InputMismatchException e) {
+	   			System.out.print("Not a valid integer.");
+			}
+		}
+		   
+	}//end main
+
+	
+	// ask and validate number 
+	private static int ask_number() {
+		System.out.println("Please enter a an integer less than a 1,000,000,000 to convert to word: ");
+		Scanner kb = new Scanner(System.in);
+		
+		// keep asking if it is not an integer
+		while (!kb.hasNextInt()) {
+        	
+            System.out.println("Your input was not an integer, please enter a number less than a 1,000,000,000: ");
+            kb.next();
+        }
+        
+        int good_num = kb.nextInt();
+        
+     // keep asking if it is not less than 1,000,000,000
+        while (good_num > 999999999){
+        	
+            System.out.println("Your input was greater than 1,000,000,000 please enter a number less than a 1,000,000,000: ");
+            kb.next();
+        }
+        
+        kb.close();
+        
+		return good_num;
+		
+	}//end ask_number
+
+
+	private static String int_to_word(int num) {
+		String word = ""; //initialize 
+		 
+				// check if it is a negative number
+		 		if(num < 0) {
+					num *= -1; //convert to positive to be able to convert to word
+		 			word += "negative "; //append 'negative' to string
+		 		}
+		 
+		 		if(num < 20)
+		 			word += ones[num];
+		 		else if(num < 100)
+		 			word += tens[(num / 10) - 1] + " " + int_to_word(num % 10);
+		 		else if(num < 1000)
+		 			word += hundreds[(num / 100) - 1] + " " + int_to_word(num % 100);
+		 		else if(num < 10000)
+		 			word += thousands[num / 1000] + " " + int_to_word(num % 1000);
+		 		else if(num < 100000)
+		 			word += int_to_word(num / 1000) + " " + thousands[0] + " " + int_to_word(num % 1000);
+		 		else if(num < 1000000)
+		 			word += int_to_word(num / 1000) + " " + thousands[0] + " " + int_to_word(num % 1000);
+		 		else if(num < 10000000)
+		 			word += millions[num / 1000000] + " " + int_to_word(num % 1000000);
+		 		else
+		 			word += int_to_word(num / 1000000) + " " + millions[0] + " " + int_to_word(num % 1000000);
+		 
+		 		return word;
+		 	}//end conver_to_word
+	
+}//end class
